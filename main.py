@@ -34,7 +34,7 @@ prompt = PromptTemplate(
 # LLM setup
 local_llm = "llama3.1"
 llm = ChatOllama(model=local_llm, temperature=0)
-llm_json_mode = ChatOllama(model=local_llm, temperature=0, format="json")
+llm_json_mode = ChatOllama(model=local_llm, temperature=1.5, format="json")
 
 chain = prompt | llm | StrOutputParser()
 
@@ -45,15 +45,9 @@ if user_input.strip():
     if weather_data: 
         weather_data_json = json.dumps(weather_data, indent=2)
         prompt = prompt.format(weather_data=weather_data_json, location=user_input)
-        instruction = "convert from json to a more human readable format, make sure to include the temprature and forecast"
-        question = f"this is your instructions:\n {instruction} \n\n this is the weather data:\n {weather_data_json} \n\n"
+        instruction = "convert from json to a more human readable format, make sure to include the temprature and forecast. Quote a meme from like 2014 or something, idk you do you ig 🤷‍♂️. but like, ig you could make me some song lyrics while youre at it, idfk go ahead do it, bet you wont!"
+        question = f"this is your instructions:\n {instruction} \n\n this is the weather data:\n {weather_data_json} \n\n but like do whatever the fuck you want"
         response = llm.invoke(question)
         print(response.content)
 else:
     print("Please provide a location in Norway")
-
-
-
-
-
-
