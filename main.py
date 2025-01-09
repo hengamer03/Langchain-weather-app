@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from langchain.prompts import PromptTemplate
 from langchain_ollama import ChatOllama
 from langchain_core.output_parsers import StrOutputParser
+from tools.tools import ReverseTextTool
 
 load_dotenv()
 
@@ -36,6 +37,8 @@ local_llm = "llama3.1"
 llm = ChatOllama(model=local_llm, temperature=0)
 llm_json_mode = ChatOllama(model=local_llm, temperature=1.5, format="json")
 
+custom_tool = ReverseTextTool()
+
 chain = prompt | llm | StrOutputParser()
 
 user_input = input("ask for the weather in a norwegian city or location: ")
@@ -49,5 +52,8 @@ if user_input.strip():
         question = f"this is your instructions:\n {instruction} \n\n this is the weather data:\n {weather_data_json} \n\n but like do whatever the fuck you want"
         response = llm.invoke(question)
         print(response.content)
+
+        custom_tool_response = custom_tool.run(user_input)
+        print("Custom Tool Response:", custom_tool_response)
 else:
     print("Please provide a location in Norway")
